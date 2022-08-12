@@ -2,7 +2,7 @@ package com.samsungconek.controller;
 
 import com.samsungconek.model.entity.Brand;
 import com.samsungconek.model.dto.BrandDto;
-import com.samsungconek.utils.ResponseHandler;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.model.entity.Logger;
 import com.samsungconek.service.brand.IBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,8 @@ public class BrandController {
     @GetMapping
     public ResponseEntity<?> findAll() {
         Iterable<Brand> brands = brandService.findAll();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, brands);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, brands);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     //    Find brand by ID
@@ -40,12 +40,12 @@ public class BrandController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Brand> brandOptional = brandService.findById(id);
         if (!brandOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("FAILURE", 404);
-            return new ResponseEntity<>(responseHandler, HttpStatus.NOT_FOUND);
+            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
         }
         Brand brand = brandOptional.get();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, brand);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, brand);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     //    Create new brand
@@ -72,12 +72,12 @@ public class BrandController {
             newBrand.setDescription(brandDto.getDescription());
             newBrand.setImage(fileName);
             brandService.save(newBrand);
-            ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 201, newBrand);
+            CustomResponse customResponse = new CustomResponse("SUCCESS", 201, newBrand);
 
-            return new ResponseEntity<>(responseHandler, HttpStatus.CREATED);
+            return new ResponseEntity<>(customResponse, HttpStatus.CREATED);
         }
-        ResponseHandler responseHandler = new ResponseHandler("FAILURE", 400);
-        return new ResponseEntity<>(responseHandler, HttpStatus.BAD_REQUEST);
+        CustomResponse customResponse = new CustomResponse("FAILURE", 400);
+        return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
     }
 
     //    Update existing brand
@@ -85,8 +85,8 @@ public class BrandController {
     public ResponseEntity<?> updateById(@PathVariable Long id, @ModelAttribute BrandDto brandDto) {
         Optional<Brand> brandOptional = brandService.findById(id);
         if (!brandOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("FAILURE", 404);
-            return new ResponseEntity<>(responseHandler, HttpStatus.BAD_REQUEST);
+            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+            return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
         } else {
             Brand oldBrand = brandOptional.get();
             oldBrand.setId(id);
@@ -106,8 +106,8 @@ public class BrandController {
                 oldBrand.setImage(fileName);
             }
             brandService.save(oldBrand);
-            ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, oldBrand);
-            return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, oldBrand);
+            return new ResponseEntity<>(customResponse, HttpStatus.OK);
         }
     }
 
@@ -116,13 +116,13 @@ public class BrandController {
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         Optional<Brand> brandOptional = brandService.findById(id);
         if (!brandOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 404);
-            return new ResponseEntity<>(responseHandler, HttpStatus.NOT_FOUND);
+            CustomResponse customResponse = new CustomResponse("SUCCESS", 404);
+            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
         } else {
             brandService.deleteById(id);
             Brand deletedBrand = brandOptional.get();
-            ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, deletedBrand);
-            return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, deletedBrand);
+            return new ResponseEntity<>(customResponse, HttpStatus.OK);
         }
     }
 }

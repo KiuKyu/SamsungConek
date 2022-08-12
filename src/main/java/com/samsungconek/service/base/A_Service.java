@@ -21,15 +21,19 @@ public class A_Service {
     }
 
     public String getUsernameLogin() {
-//        return SecurityContextHolder
+//        return SecurityContextHolder -> get context -> get authentication -> get name;
         return null;
     }
 
     public UserLogin getUserLogin() {
+        // String username = securitycontextholder -> get context -> get authentication -> get name
+        // User user = userRepo -> findByUserName(username)
+        // check if user is null or userrole is null -> return UserLogin(user)
         return null;
     }
 
     protected boolean isAdmin() {
+        // check if user is admin
         UserLogin userLogin = getUserLogin();
         return userLogin.isRole(UserRole.ROLE_ADMIN.name());
     }

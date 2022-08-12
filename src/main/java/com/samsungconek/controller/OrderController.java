@@ -1,6 +1,6 @@
 package com.samsungconek.controller;
 
-import com.samsungconek.utils.ResponseHandler;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.model.entity.Order;
 import com.samsungconek.service.order.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,8 @@ public class OrderController {
     public ResponseEntity<?> findAll() {
 //        add principal check for admin role
         Iterable<Order> orders = orderService.findAll();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, orders);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, orders);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     // as admin . find all orders of 1 customers
@@ -50,12 +50,12 @@ public class OrderController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Order> orderOptional = orderService.findById(id);
         if (!orderOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("FAILURE", 404);
-            return new ResponseEntity<>(responseHandler, HttpStatus.NOT_FOUND);
+            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
         } else {
             Order order = orderOptional.get();
-            ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, order);
-            return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, order);
+            return new ResponseEntity<>(customResponse, HttpStatus.OK);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.samsungconek.controller;
 
-import com.samsungconek.utils.ResponseHandler;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.model.entity.User;
 import com.samsungconek.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,8 @@ public class UserController {
     public ResponseEntity<?> findAll(@RequestParam(name = "q") Optional<String> q, @PathVariable int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, ITEM_PER_PAGE);
         Page<User> users = userService.findAll(pageable);
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, users);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, users);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     // Find user with ID
@@ -36,12 +36,12 @@ public class UserController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("FAILURE", 404);
-            return new ResponseEntity<>(responseHandler, HttpStatus.NOT_FOUND);
+            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
         }
         User user = userOptional.get();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, user);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, user);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
     // Create user = Register = làm phần này sau khi làm Security
 }

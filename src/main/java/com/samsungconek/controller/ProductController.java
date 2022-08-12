@@ -2,7 +2,7 @@ package com.samsungconek.controller;
 
 import com.samsungconek.model.dto.ProductDto;
 import com.samsungconek.service.product.IProductService;
-import com.samsungconek.utils.ResponseHandler;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.model.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,8 +31,8 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<?> findAll() {
         Iterable<Product> products = productService.findAll();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, products);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, products);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     // find all + paging
@@ -40,8 +40,8 @@ public class ProductController {
     public ResponseEntity<?> findAll(@PathVariable int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber, ITEM_PER_PAGE);
         Page<Product> products = productService.findAll(pageable);
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, products);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, products);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     // create product
@@ -73,12 +73,12 @@ public class ProductController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Product> productOptional = productService.findById(id);
         if (!productOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("FAILURE", 404);
-            return new ResponseEntity<>(responseHandler, HttpStatus.NOT_FOUND);
+            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
         } else {
             Product product = productOptional.get();
-            ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, product);
-            return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, product);
+            return new ResponseEntity<>(customResponse, HttpStatus.OK);
         }
     }
 
@@ -87,8 +87,8 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @ModelAttribute ProductDto productDto) {
         Optional<Product> productOptional = productService.findById(id);
         if (!productOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("FAILURE", 404);
-            return new ResponseEntity<>(responseHandler, HttpStatus.NOT_FOUND);
+            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
         } else {
             Product oldProduct = new Product();
             oldProduct.setId(id);

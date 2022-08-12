@@ -1,6 +1,6 @@
 package com.samsungconek.controller;
 
-import com.samsungconek.utils.ResponseHandler;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.model.entity.Comment;
 import com.samsungconek.service.comment.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class CommentController {
     @GetMapping
     public ResponseEntity<?> findAll() {
         Iterable<Comment> comments = commentService.findAll();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, comments);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, comments);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 }

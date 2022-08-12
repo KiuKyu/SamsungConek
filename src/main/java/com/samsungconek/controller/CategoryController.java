@@ -1,7 +1,7 @@
 package com.samsungconek.controller;
 
 import com.samsungconek.model.entity.Category;
-import com.samsungconek.utils.ResponseHandler;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.service.category.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,8 +26,8 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> findAll() {
         Iterable<Category> categories = categoryService.findAll();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, categories);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, categories);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     //    find all cate (paging)
@@ -36,8 +36,8 @@ public class CategoryController {
         Pageable pageable = PageRequest.of(pageNumber, ITEM_PER_PAGE);
         Page<Category> categories = categoryService.findAll(pageable);
         // thêm phần search theo từ khóa ở đây
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, categories);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, categories);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     //    find cate by ID
@@ -45,20 +45,20 @@ public class CategoryController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Optional<Category> categoryOptional = categoryService.findById(id);
         if (!categoryOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("FAILURE", 404);
-            return new ResponseEntity<>(responseHandler, HttpStatus.NOT_FOUND);
+            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
         }
         Category category = categoryOptional.get();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, category);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, category);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     //    add new cate
     @PostMapping
     public ResponseEntity<?> createCategory(@RequestBody Category category) {
         Category newCategory = categoryService.save(category);
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 201, newCategory);
-        return new ResponseEntity<>(responseHandler, HttpStatus.CREATED);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 201, newCategory);
+        return new ResponseEntity<>(customResponse, HttpStatus.CREATED);
     }
 
     //    edit category
@@ -66,8 +66,8 @@ public class CategoryController {
     public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody Category newCategory) {
         Optional<Category> categoryOptional = categoryService.findById(id);
         if (!categoryOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("FAILURE", 404);
-            return new ResponseEntity<>(responseHandler, HttpStatus.NOT_FOUND);
+            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
         } else {
             Category oldCategory = new Category();
             oldCategory.setId(id);
@@ -78,8 +78,8 @@ public class CategoryController {
             oldCategory.setParentCategory(newCategory.getParentCategory());
             oldCategory.setSpecs(newCategory.getSpecs());
             categoryService.save(oldCategory);
-            ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, oldCategory);
-            return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, oldCategory);
+            return new ResponseEntity<>(customResponse, HttpStatus.OK);
         }
     }
 
@@ -88,20 +88,20 @@ public class CategoryController {
     public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
         Optional<Category> categoryOptional = categoryService.findById(id);
         if (!categoryOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("FAILURE", 404);
-            return new ResponseEntity<>(responseHandler, HttpStatus.NOT_FOUND);
+            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
         } else {
             categoryService.deleteById(id);
             Category deletedCategory = categoryOptional.get();
-            ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, deletedCategory);
-            return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, deletedCategory);
+            return new ResponseEntity<>(customResponse, HttpStatus.OK);
         }
     }
 
     @GetMapping("/header")
     public ResponseEntity<?> showHeaderCategory() {
         Iterable<Category> categories = categoryService.findAllByParentCategoryIsNull();
-        ResponseHandler responseHandler = new ResponseHandler("OK", 200, categories);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("OK", 200, categories);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 }

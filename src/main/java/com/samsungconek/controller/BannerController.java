@@ -1,12 +1,9 @@
 package com.samsungconek.controller;
 
 import com.samsungconek.model.dto.BannerDto;
-import com.samsungconek.utils.Envelope;
-import com.samsungconek.utils.Meta;
-import com.samsungconek.utils.ResponseHandler;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.model.entity.Banner;
 import com.samsungconek.service.banner.IBannerService;
-import com.samsungconek.utils.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +21,8 @@ public class BannerController extends AbstractController {
     @GetMapping
     public ResponseEntity<?> findAll() {
         Iterable<Banner> banners = bannerService.findAll();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 1, banners);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 1, banners);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -92,12 +89,12 @@ public class BannerController extends AbstractController {
     public ResponseEntity<?> deleteBanner(@PathVariable Long id) {
         Optional<Banner> bannerOptional = bannerService.findById(id);
         if (!bannerOptional.isPresent()) {
-            ResponseHandler responseHandler = new ResponseHandler("FAILURE", 400);
-            return new ResponseEntity<>(responseHandler, HttpStatus.BAD_REQUEST);
+            CustomResponse customResponse = new CustomResponse("FAILURE", 400);
+            return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
         }
         Banner deletedBanner = bannerOptional.get();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, deletedBanner);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, deletedBanner);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
 
 
     }

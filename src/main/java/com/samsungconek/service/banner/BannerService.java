@@ -4,6 +4,7 @@ import com.samsungconek.model.dto.BannerDto;
 import com.samsungconek.model.dto.ListDto;
 import com.samsungconek.model.entity.Banner;
 import com.samsungconek.repository.IBannerRepository;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
 import com.samsungconek.utils.exception.CustomException;
@@ -75,6 +76,12 @@ public class BannerService implements IBannerService {
     @Override
     public ListDto<BannerDto> getList() {
         return null;
+    }
+
+    @Override
+    public CustomResponse delete(Long id) {
+        Optional<Banner> bannerOptional = bannerRepository.findById(id);
+        BusinessAssert.isTrue();
     }
 
 //    @Override

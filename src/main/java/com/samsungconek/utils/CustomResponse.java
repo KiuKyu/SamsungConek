@@ -2,20 +2,18 @@ package com.samsungconek.utils;
 
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @NoArgsConstructor
-public class ResponseHandler {
+public class CustomResponse {
     private String message;
     private int code;
     private Object data;
 
-    public ResponseHandler(String message, int code) {
+    public CustomResponse(String message, int code) {
         this.message = message;
         this.code = code;
     }
 
-    public ResponseHandler(String message, int code, Object data) {
+    public CustomResponse(String message, int code, Object data) {
         this.message = message;
         this.code = code;
         this.data = data;

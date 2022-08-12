@@ -1,6 +1,6 @@
 package com.samsungconek.controller;
 
-import com.samsungconek.utils.ResponseHandler;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.service.role.IRoleService;
 import com.samsungconek.model.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +18,14 @@ public class RoleController {
     @GetMapping
     public ResponseEntity<?> findAllRoles() {
         Iterable<Role> roles = roleService.findAll();
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 200, roles);
-        return new ResponseEntity<>(responseHandler, HttpStatus.OK);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, roles);
+        return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }
 //    Create role
     @PostMapping
     public ResponseEntity<?> createRole(@RequestBody Role role) {
         Role newRole = roleService.save(role);
-        ResponseHandler responseHandler = new ResponseHandler("SUCCESS", 201, newRole);
-        return new ResponseEntity<>(responseHandler, HttpStatus.CREATED);
+        CustomResponse customResponse = new CustomResponse("SUCCESS", 201, newRole);
+        return new ResponseEntity<>(customResponse, HttpStatus.CREATED);
     }
 }
