@@ -14,12 +14,9 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Table(name = "ROLES")
 public class Role {
-//    private UserRole ROLE_ADMIN = UserRole.ROLE_ADMIN;
-//    private UserRole ROLE_SUPPORT = UserRole.ROLE_SUPPORT;
-//    private UserRole ROLE_CUSTOMER = UserRole.ROLE_CUSTOMER;
-    public static final String ROLE_ADMIN = UserRole.ROLE_ADMIN.name();
-    public static final String ROLE_SUPPORT = "ROLE_SUPPORT";
-    public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
+//    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+//    public static final String ROLE_SUPPORT = "ROLE_SUPPORT";
+//    public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
 
     @Id
     @Column(name = "ID", columnDefinition = "NUMBER(2)")
@@ -39,19 +36,25 @@ public class Role {
     @Column(name = "IS_ACTIVE", nullable = false)
     private boolean isActive = true;
 
-//    @NotNull
-//    @Column(name = "CREATE_DATE", nullable = false, columnDefinition = "NUMBER(19)")
-//    private long createDate;
-//
-//    @NotNull
-//    @Column(name = "MODIFY_DATE", nullable = false, columnDefinition = "NUMBER(19) default 0")
-//    private long modifyDate = 0L;
+    @NotNull
+    @Column(name = "CREATE_DATE", nullable = false, columnDefinition = "NUMBER(19)")
+    private long createDate;
 
-//    @NotNull
-//    @Column(name = "CREATE_USER", columnDefinition = "NUMBER(19)", nullable = false)
-//    private long createUser;
-//
-//    @NotNull
-//    @Column(name = "MODIFY_USER", columnDefinition = "NUMBER(19) default 0", nullable = false)
-//    private long modifyUser = 0L;
+    @NotNull
+    @Column(name = "MODIFY_DATE", nullable = false, columnDefinition = "NUMBER(19) default 0")
+    private long modifyDate = 0L;
+
+    @NotNull
+    @Column(name = "CREATE_USER", columnDefinition = "NUMBER(19)", nullable = false)
+    private long createUser;
+
+    @NotNull
+    @Column(name = "MODIFY_USER", columnDefinition = "NUMBER(19) default 0", nullable = false)
+    private long modifyUser = 0L;
+
+    public Role (UserRole roleName, boolean isActive, boolean isAdmin) {
+        this.name = roleName.name();
+        this.isActive = isActive;
+        this.isAdmin = isAdmin;
+    }
 }

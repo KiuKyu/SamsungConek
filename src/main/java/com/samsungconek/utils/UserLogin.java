@@ -45,7 +45,7 @@ public class UserLogin {
     public boolean isRole(String... roles) {
         if (this.role != null && roles != null) {
             for (String role : roles) {
-                if (this.role == role) {
+                if (this.role.getName().equals(role)) {
                     return true;
                 }
             }

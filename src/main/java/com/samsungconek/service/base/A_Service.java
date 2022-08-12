@@ -2,11 +2,13 @@ package com.samsungconek.service.base;
 
 import com.samsungconek.constant.UserRole;
 import com.samsungconek.model.dto.base.PageNumberRequestDto;
+import com.samsungconek.model.entity.User;
 import com.samsungconek.repository.IUserRepository;
 import com.samsungconek.utils.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class A_Service {
     @Autowired
@@ -21,19 +23,19 @@ public class A_Service {
     }
 
     public String getUsernameLogin() {
-//        return SecurityContextHolder -> get context -> get authentication -> get name;
-        return null;
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     public UserLogin getUserLogin() {
-        // String username = securitycontextholder -> get context -> get authentication -> get name
-        // User user = userRepo -> findByUserName(username)
-        // check if user is null or userrole is null -> return UserLogin(user)
+        String username = getUsernameLogin();
+        User user = userRepository.findByUsername(username);
+        if (user != null && user.getRole() != null) {
+            return new UserLogin(user);
+        }
         return null;
     }
 
     protected boolean isAdmin() {
-        // check if user is admin
         UserLogin userLogin = getUserLogin();
         return userLogin.isRole(UserRole.ROLE_ADMIN.name());
     }

@@ -4,6 +4,7 @@ import com.samsungconek.model.dto.BannerDto;
 import com.samsungconek.model.dto.ListDto;
 import com.samsungconek.model.entity.Banner;
 import com.samsungconek.repository.IBannerRepository;
+import com.samsungconek.service.base.A_Service;
 import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
@@ -19,7 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Service
-public class BannerService implements IBannerService {
+public class BannerService extends A_Service implements IBannerService {
     @Autowired
     private IBannerRepository bannerRepository;
 
@@ -56,7 +57,7 @@ public class BannerService implements IBannerService {
 
     @Override
     public Banner create(BannerDto bannerDto) {
-        BusinessAssert.isTrue(,BusinessExceptionCode.PERMISSION_DENIED,"Không có quyền");
+        BusinessAssert.isTrue(isAdmin(),BusinessExceptionCode.PERMISSION_DENIED,"Không có quyền");
     }
 
     @Override
