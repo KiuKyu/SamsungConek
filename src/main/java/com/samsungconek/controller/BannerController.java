@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,9 +21,12 @@ public class BannerController extends AbstractController {
 
     @GetMapping
     public ResponseEntity<?> findAll() {
-        Iterable<Banner> banners = bannerService.findAll();
-        CustomResponse customResponse = new CustomResponse("SUCCESS", 1, banners);
-        return new ResponseEntity<>(customResponse, HttpStatus.OK);
+//        Iterable<Banner> banners = bannerService.findAll();
+//        CustomResponse customResponse = new CustomResponse("SUCCESS", 1, banners);
+//        return new ResponseEntity<>(customResponse, HttpStatus.OK);
+
+        List<Banner> bannerList = bannerService.findAll();
+        return getResponseEntity(bannerService.findAll());
     }
 
     @GetMapping("/{id}")
@@ -36,7 +40,7 @@ public class BannerController extends AbstractController {
     }
 
 //    @PostMapping
-//    public ResponseEntity<?> save(@ModelAttribute BannerDto bannerDto) {
+//    public ResponseEntity<?> create(@ModelAttribute BannerDto bannerDto) {
 //        Object banner = bannerService.saveNew(bannerDto);
 //        Envelope cr = new Envelope(banner);
 //        return cr.toResponseEntity();
@@ -87,16 +91,7 @@ public class BannerController extends AbstractController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBanner(@PathVariable Long id) {
-        Optional<Banner> bannerOptional = bannerService.findById(id);
-        if (!bannerOptional.isPresent()) {
-            CustomResponse customResponse = new CustomResponse("FAILURE", 400);
-            return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
-        }
-        Banner deletedBanner = bannerOptional.get();
-        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, deletedBanner);
-        return new ResponseEntity<>(customResponse, HttpStatus.OK);
-
-
+        return getResponseEntity(bannerService.delete(id));
     }
 
     @PostMapping("/multiple")
