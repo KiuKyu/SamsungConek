@@ -78,8 +78,27 @@ public class BannerService extends A_Service implements IBannerService {
     public Banner update(Long id, BannerDto bannerDto) {
         BusinessAssert.isTrue(isAdmin(), BusinessExceptionCode.PERMISSION_DENIED, "Không có quyền");
         Optional<Banner> bannerOptional = bannerRepository.findById(id);
-        BusinessAssert.isTrue(bannerOptional.isPresent(), BusinessExceptionCode.);
-        return null;
+        BusinessAssert.isTrue(bannerOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+
+        MultipartFile img = bannerDto.getImage();
+        BusinessAssert.notTrue(img.isEmpty(), BusinessExceptionCode.INVALID_PARAM, "Thiếu ảnh banner");
+        String fileName = img.getOriginalFilename();
+        long currentTime = System.currentTimeMillis();
+        fileName = currentTime + "_" + fileName;
+        try {
+            FileCopyUtils.copy(img.getBytes(), new File(uploadPath + fileName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Banner banner = new Banner();
+        banner.setId(id);
+        banner.setName(bannerDto.getName());
+        banner.setStatus(bannerDto.isStatus());
+        banner.setPriority(bannerDto.getPriority());
+        banner.setEndDate(bannerDto.getEndDate());
+        banner.setImage(fileName);
+        return banner;
     }
 
     @Override

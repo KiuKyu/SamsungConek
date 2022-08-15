@@ -39,6 +39,11 @@ public class BannerController extends AbstractController {
         return getResponseEntity(bannerService.create(bannerDto));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute BannerDto bannerDto) {
+        return getResponseEntity(bannerService.update(id, bannerDto));
+    }
+
 //    @PostMapping
 //    public ResponseEntity<?> create(@ModelAttribute BannerDto bannerDto) {
 //        Object banner = bannerService.saveNew(bannerDto);
