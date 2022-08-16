@@ -19,5 +19,10 @@ public class Shipping {
     private Long id;
 
     @OneToMany
+    @JoinColumn(name = "ORDER_ID")
     private List<Order> orderList;
+
+    @OneToMany
+    @JoinColumn(name = "USER_ID")
+    private List<User> user;
 }
