@@ -36,6 +36,9 @@ dependencies {
 //    Validation
     implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
     implementation group: 'org.hibernate', name: 'hibernate-validator', version: '6.1.0.Final'
+//    Collection utils
+//    implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+
 
 }
 

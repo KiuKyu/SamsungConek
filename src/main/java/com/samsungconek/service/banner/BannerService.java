@@ -53,7 +53,7 @@ public class BannerService extends A_Service implements IBannerService {
 //    }
 
     @Override
-    public Banner create(BannerDto bannerDto) {
+    public Banner save(BannerDto bannerDto) {
         BusinessAssert.isTrue(isAdmin(), BusinessExceptionCode.PERMISSION_DENIED,"Không có quyền");
         MultipartFile img = bannerDto.getImage();
         BusinessAssert.notTrue(img.isEmpty(), BusinessExceptionCode.INVALID_PARAM, "Thiếu ảnh banner");
@@ -102,10 +102,20 @@ public class BannerService extends A_Service implements IBannerService {
     }
 
     @Override
-    public Banner getOne(Long id) {
+    public Banner findById(Long id) {
         Optional<Banner> bannerOptional = bannerRepository.findById(id);
         BusinessAssert.isTrue(bannerOptional.isPresent(), "2", "Không tồn tại");
         return bannerOptional.get();
+    }
+
+    @Override
+    public Banner save(Banner banner) {
+        return null;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
     }
 
 //    @Override

@@ -2,11 +2,14 @@ package com.samsungconek.service.category;
 
 import com.samsungconek.model.entity.Category;
 import com.samsungconek.repository.ICategoryRepository;
+import com.samsungconek.utils.exception.BusinessAssert;
+import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,13 +18,17 @@ public class CategoryService implements ICategoryService {
     private ICategoryRepository categoryRepository;
 
     @Override
-    public Iterable<Category> findAll() {
-        return categoryRepository.findAll();
+    public List<Category> findAll() {
+        List<Category> categoryList = categoryRepository.findAll();
+        BusinessAssert.isTrue(categoryList.size() > 0, BusinessExceptionCode.EMPTY_LIST, "Danh sách rỗng");
+        return categoryList;
     }
 
     @Override
-    public Optional<Category> findById(Long id) {
-        return categoryRepository.findById(id);
+    public Category findById(Long id) {
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        BusinessAssert.isTrue(categoryOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return categoryOptional.get();
     }
 
     @Override
@@ -40,7 +47,9 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public Iterable<Category> findAllByParentCategoryIsNull() {
-        return categoryRepository.findAllByParentCategoryIsNull();
+    public List<Category> findAllByParentCategoryIsNull() {
+        List<Category> categoryList = categoryRepository.findAllByParentCategoryIsNull();
+        BusinessAssert.isTrue(categoryList.size() > 0, BusinessExceptionCode.EMPTY_LIST, "Danh sách rỗng");
+        return categoryList;
     }
 }

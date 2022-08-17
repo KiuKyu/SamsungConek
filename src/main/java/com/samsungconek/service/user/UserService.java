@@ -1,20 +1,19 @@
 package com.samsungconek.service.user;
 
 import com.samsungconek.model.entity.User;
-//import com.samsungconek.model.auth.UserPrincipal;
 import com.samsungconek.model.entity.CustomUserDetails;
 import com.samsungconek.repository.IUserRepository;
+import com.samsungconek.utils.exception.BusinessAssert;
+import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,13 +23,15 @@ public class UserService implements IUserService, UserDetailsService {
     private IUserRepository userRepository;
 
     @Override
-    public Iterable<User> findAll() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public User findById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        BusinessAssert.isTrue(userOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return userOptional.get();
     }
 
     @Override
@@ -40,6 +41,8 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Override
     public void deleteById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        BusinessAssert.isTrue(userOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         userRepository.deleteById(id);
     }
 
@@ -50,8 +53,9 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Override
     public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-//        return null;
+        User user = userRepository.findByUsername(username);
+        BusinessAssert.notNull(user, BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return user;
     }
 
     @Override
@@ -67,13 +71,4 @@ public class UserService implements IUserService, UserDetailsService {
         }
         return new CustomUserDetails(user);
     }
-
-//    @Override
-//    public UserDetails loadUserByUsername(String username) {
-//        Optional<User> userOptional = userRepository.findByUsername(username);
-//        if (!userOptional.isPresent()) {
-//            throw new UsernameNotFoundException(username);
-//        }
-//        return UserPrincipal.build(userOptional.get());
-//    }
 }

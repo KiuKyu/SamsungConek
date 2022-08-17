@@ -31,12 +31,12 @@ public class BannerController extends AbstractController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
-        return getResponseEntity(bannerService.getOne(id));
+        return getResponseEntity(bannerService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<?> create(@ModelAttribute BannerDto bannerDto) {
-        return getResponseEntity(bannerService.create(bannerDto));
+        return getResponseEntity(bannerService.save(bannerDto));
     }
 
     @PutMapping("/{id}")

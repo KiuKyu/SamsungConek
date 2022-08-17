@@ -2,12 +2,13 @@ package com.samsungconek.service;
 
 import com.samsungconek.utils.exception.CustomException;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IGeneralService<T> {
-    Iterable<T> findAll();
+    List<T> findAll();
 
-    Optional<T> findById(Long id);
+    T findById(Long id);
 
     T save(T t);
 
