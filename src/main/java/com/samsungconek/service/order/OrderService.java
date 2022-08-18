@@ -2,9 +2,12 @@ package com.samsungconek.service.order;
 
 import com.samsungconek.model.entity.Order;
 import com.samsungconek.repository.IOrderRepository;
+import com.samsungconek.utils.exception.BusinessAssert;
+import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,13 +16,17 @@ public class OrderService implements IOrderService {
     private IOrderRepository orderRepository;
 
     @Override
-    public Iterable<Order> findAll() {
+    public List<Order> findAll() {
+        List<Order> orders = orderRepository.findAll();
+        BusinessAssert.isTrue(orders.size() > 0, BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         return orderRepository.findAll();
     }
 
     @Override
-    public Optional<Order> findById(Long id) {
-        return orderRepository.findById(id);
+    public Order findById(Long id) {
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        BusinessAssert.isTrue(orderOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return orderOptional.get();
     }
 
     @Override
@@ -29,6 +36,8 @@ public class OrderService implements IOrderService {
 
     @Override
     public void deleteById(Long id) {
+        Optional<Order> orderOptional = orderRepository.findById(id);
+        BusinessAssert.isTrue(orderOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         orderRepository.deleteById(id);
     }
 }

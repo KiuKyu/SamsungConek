@@ -42,9 +42,13 @@ public class FooterService implements IFooterService {
         footerRepository.deleteById(id);
     }
 
-    public Footer update(Long id, Footer footer) {
+    public Footer update(Long id, Footer newFooter) {
         Optional<Footer> footerOptional = footerRepository.findById(id);
         BusinessAssert.isTrue(footerOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
-        footerRepository.save()
+        Footer footer = new Footer();
+        footer.setId(id);
+        footer.setName(newFooter.getName());
+        footer.setValue(newFooter.getValue());
+        return footerRepository.save(footer);
     }
 }

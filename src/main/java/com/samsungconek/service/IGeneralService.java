@@ -1,5 +1,6 @@
 package com.samsungconek.service;
 
+import com.samsungconek.model.dto.base.ObjectResponse;
 import com.samsungconek.utils.exception.CustomException;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface IGeneralService<T> {
 
     T save(T t);
 
-    void deleteById(Long id);
+    ObjectResponse deleteById(Long id);
 
 //    Nếu k sửa được Sequence + Trigger :
 //    => Tạo thêm 2 phương thức chung

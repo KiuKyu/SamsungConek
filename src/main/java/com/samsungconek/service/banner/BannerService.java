@@ -2,6 +2,7 @@ package com.samsungconek.service.banner;
 
 import com.samsungconek.model.dto.BannerDto;
 import com.samsungconek.model.dto.ListDto;
+import com.samsungconek.model.dto.base.ObjectResponse;
 import com.samsungconek.model.entity.Banner;
 import com.samsungconek.repository.IBannerRepository;
 import com.samsungconek.service.base.A_Service;
@@ -52,7 +53,6 @@ public class BannerService extends A_Service implements IBannerService {
 //        }
 //    }
 
-    @Override
     public Banner save(BannerDto bannerDto) {
         BusinessAssert.isTrue(isAdmin(), BusinessExceptionCode.PERMISSION_DENIED,"Không có quyền");
         MultipartFile img = bannerDto.getImage();
@@ -114,8 +114,11 @@ public class BannerService extends A_Service implements IBannerService {
     }
 
     @Override
-    public void deleteById(Long id) {
-
+    public ObjectResponse deleteById(Long id) {
+        Optional<Banner> bannerOptional = bannerRepository.findById(id);
+        BusinessAssert.isTrue(bannerOptional.isPresent(), "6", "Không tồn tại");
+        bannerRepository.deleteById(id);
+        return new ObjectResponse(1, "Thành công");
     }
 
 //    @Override
@@ -124,15 +127,6 @@ public class BannerService extends A_Service implements IBannerService {
 //        BusinessAssert.isTrue(, BusinessExceptionCode.EMPTY_LIST, "Không có banner nào tồn tại");
 //        return null;
 //    }
-
-    @Override
-    public CustomResponse delete(Long id) {
-        BusinessAssert.isTrue(isAdmin(), BusinessExceptionCode.PERMISSION_DENIED, "Không có quyền");
-        Optional<Banner> bannerOptional = bannerRepository.findById(id);
-        BusinessAssert.isTrue(bannerOptional.isPresent(), "2", "Không tồn tại");
-        bannerRepository.deleteById(id);
-        return new CustomResponse("Thành công", 1);
-    }
 
     @Override
     public List<Banner> findAll() {

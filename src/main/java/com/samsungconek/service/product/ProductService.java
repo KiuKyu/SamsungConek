@@ -3,6 +3,8 @@ package com.samsungconek.service.product;
 import com.samsungconek.model.entity.Category;
 import com.samsungconek.model.entity.Product;
 import com.samsungconek.repository.IProductRepository;
+import com.samsungconek.utils.exception.BusinessAssert;
+import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,13 +19,17 @@ public class ProductService implements IProductService{
     private IProductRepository productRepository;
 
     @Override
-    public Iterable<Product> findAll() {
+    public List<Product> findAll() {
+        List<Product> products = productRepository.findAll();
+        BusinessAssert.isTrue(products.size() > 0, BusinessExceptionCode.EMPTY_LIST, "Danh sách rỗng");
         return productRepository.findAll();
     }
 
     @Override
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
+    public Product findById(Long id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        BusinessAssert.isTrue(productOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return productOptional.get();
     }
 
     @Override
@@ -33,6 +39,8 @@ public class ProductService implements IProductService{
 
     @Override
     public void deleteById(Long id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        BusinessAssert.isTrue(productOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         productRepository.deleteById(id);
     }
 

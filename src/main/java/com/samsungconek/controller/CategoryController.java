@@ -25,7 +25,7 @@ public class CategoryController {
     //    find all cate
     @GetMapping
     public ResponseEntity<?> findAll() {
-        Iterable<Category> categories = categoryService.findAll();
+
         CustomResponse customResponse = new CustomResponse("SUCCESS", 200, categories);
         return new ResponseEntity<>(customResponse, HttpStatus.OK);
     }

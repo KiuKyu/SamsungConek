@@ -1,9 +1,13 @@
 package com.samsungconek.utils.exception;
 
-public class BusinessExceptionCode {
-    public static final String INVALID_PARAM = "Thiếu dữ liệu ở trường bắt buộc";
-    public static final String PERMISSION_DENIED = "Không được phép truy cập";
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-    public static final String EMPTY_LIST = "Danh sách rỗng";
-    public static final String NOT_EXIST = "Không tồn tại";
+@Data
+@AllArgsConstructor
+public class BusinessExceptionCode {
+    public static final String INVALID_PARAM = "3";
+    public static final String PERMISSION_DENIED = "5";
+    public static final String EMPTY_LIST = "4";
+    public static final String NOT_EXIST = "6";
 }

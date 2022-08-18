@@ -9,11 +9,11 @@ import com.samsungconek.utils.CustomResponse;
 import java.util.List;
 
 public interface IBannerService extends IGeneralService<Banner> {
-    Banner save(BannerDto bannerDto);
+//    Banner save(BannerDto bannerDto);
 
     Banner update(Long id, BannerDto bannerDto);
 
 //    ListDto<BannerDto> getList();
 
-    CustomResponse delete(Long id);
+//    CustomResponse delete(Long id);
 }
