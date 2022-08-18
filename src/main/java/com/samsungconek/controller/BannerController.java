@@ -96,7 +96,7 @@ public class BannerController extends AbstractController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBanner(@PathVariable Long id) {
-        return getResponseEntity(bannerService.delete(id));
+        return getResponseEntity(bannerService.deleteById(id));
     }
 
     @PostMapping("/multiple")

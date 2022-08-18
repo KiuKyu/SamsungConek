@@ -64,7 +64,6 @@ public class Envelope extends HashMap<String, Object> {
     }
 
     public ResponseEntity<?> toResponseEntity(HttpStatus status) {
-        // XXX (ThanhNV60): Return an Envelope
         Object data = getData();
         if (data == null) {
             data = getMeta();

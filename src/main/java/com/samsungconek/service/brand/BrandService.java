@@ -2,6 +2,7 @@ package com.samsungconek.service.brand;
 
 import com.samsungconek.model.entity.Brand;
 import com.samsungconek.repository.IBrandRepository;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,10 @@ public class BrandService implements IBrandService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public CustomResponse deleteById(Long id) {
         Optional<Brand> brandOptional = brandRepository.findById(id);
         BusinessAssert.isTrue(brandOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         brandRepository.deleteById(id);
+        return new CustomResponse("Thành công", 1);
     }
 }

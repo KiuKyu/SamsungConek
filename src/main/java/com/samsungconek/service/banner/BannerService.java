@@ -1,15 +1,12 @@
 package com.samsungconek.service.banner;
 
 import com.samsungconek.model.dto.BannerDto;
-import com.samsungconek.model.dto.ListDto;
-import com.samsungconek.model.dto.base.ObjectResponse;
 import com.samsungconek.model.entity.Banner;
 import com.samsungconek.repository.IBannerRepository;
 import com.samsungconek.service.base.A_Service;
 import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
-import com.samsungconek.utils.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -53,6 +50,7 @@ public class BannerService extends A_Service implements IBannerService {
 //        }
 //    }
 
+    @Override
     public Banner save(BannerDto bannerDto) {
         BusinessAssert.isTrue(isAdmin(), BusinessExceptionCode.PERMISSION_DENIED,"Không có quyền");
         MultipartFile img = bannerDto.getImage();
@@ -114,11 +112,11 @@ public class BannerService extends A_Service implements IBannerService {
     }
 
     @Override
-    public ObjectResponse deleteById(Long id) {
+    public CustomResponse deleteById(Long id) {
         Optional<Banner> bannerOptional = bannerRepository.findById(id);
         BusinessAssert.isTrue(bannerOptional.isPresent(), "6", "Không tồn tại");
         bannerRepository.deleteById(id);
-        return new ObjectResponse(1, "Thành công");
+        return new CustomResponse("Thành công", 1);
     }
 
 //    @Override

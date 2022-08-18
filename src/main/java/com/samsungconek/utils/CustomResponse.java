@@ -4,8 +4,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class CustomResponse {
-    private String message;
     private int code;
+    private String message;
     private Object data;
 
     public CustomResponse(String message, int code) {
