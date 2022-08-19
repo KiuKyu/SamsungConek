@@ -37,12 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
+        return new BCryptPasswordEncoder(); // encode password
     }
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userService) // provide userservice for spring security
+                .passwordEncoder(passwordEncoder()); // provide password encoder
     }
 
     @Override
@@ -52,8 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoringAntMatchers("/**")
                 .and()
                 .authorizeRequests()
-                .anyRequest()
-                .permitAll();
+                .antMatchers("**").permitAll()
+                .anyRequest().permitAll();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

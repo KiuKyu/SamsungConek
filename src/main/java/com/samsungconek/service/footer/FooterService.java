@@ -2,6 +2,7 @@ package com.samsungconek.service.footer;
 
 import com.samsungconek.model.entity.Footer;
 import com.samsungconek.repository.IFooterRepository;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,11 @@ public class FooterService implements IFooterService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public CustomResponse deleteById(Long id) {
         Optional<Footer> footerOptional = footerRepository.findById(id);
         BusinessAssert.isTrue(footerOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         footerRepository.deleteById(id);
+        return new CustomResponse("Thành công", 1);
     }
 
     public Footer update(Long id, Footer newFooter) {

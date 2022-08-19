@@ -3,6 +3,7 @@ package com.samsungconek.service.user;
 import com.samsungconek.model.entity.User;
 import com.samsungconek.model.entity.CustomUserDetails;
 import com.samsungconek.repository.IUserRepository;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +41,11 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public CustomResponse deleteById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         BusinessAssert.isTrue(userOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         userRepository.deleteById(id);
+        return new CustomResponse("Thành công", 1);
     }
 
     @Override
@@ -59,8 +61,10 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User findByEmail(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        BusinessAssert.isTrue(userOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return userOptional.get();
     }
 
     @Override
@@ -69,6 +73,12 @@ public class UserService implements IUserService, UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new CustomUserDetails(user);
+        return CustomUserDetails.build(user);
     }
-}
+
+    public UserDetails loadUserById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        BusinessAssert.isTrue(userOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return CustomUserDetails.build(userOptional.get());
+        }
+    }

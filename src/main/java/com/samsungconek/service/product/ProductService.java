@@ -3,6 +3,7 @@ package com.samsungconek.service.product;
 import com.samsungconek.model.entity.Category;
 import com.samsungconek.model.entity.Product;
 import com.samsungconek.repository.IProductRepository;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,11 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public void deleteById(Long id) {
+    public CustomResponse deleteById(Long id) {
         Optional<Product> productOptional = productRepository.findById(id);
         BusinessAssert.isTrue(productOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         productRepository.deleteById(id);
+        return new CustomResponse();
     }
 
     @Override

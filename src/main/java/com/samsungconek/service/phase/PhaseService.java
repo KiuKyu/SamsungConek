@@ -2,6 +2,7 @@ package com.samsungconek.service.phase;
 
 import com.samsungconek.model.entity.Phase;
 import com.samsungconek.repository.IPhaseRepository;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +17,23 @@ public class PhaseService implements IPhaseService{
     private IPhaseRepository phaseRepository;
 
     @Override
-    public List<Phase> phaseList() {
-        List<Phase> phaseList = phaseRepository.findAll();
-        BusinessAssert.isTrue(phaseList.size() > 0, BusinessExceptionCode.EMPTY_LIST, "Danh sách rỗng") ;
-        return phaseList;
-    }
-
-    @Override
-    public Phase getOne(Long id) {
+    public Phase findById(Long id) {
         Optional<Phase> phaseOptional = phaseRepository.findById(id);
         BusinessAssert.isTrue(phaseOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         return phaseOptional.get();
     }
 
     @Override
-    public void delete(Long id) {
+    public Phase save(Phase phase) {
+        return phaseRepository.save(phase);
+    }
+
+    @Override
+    public CustomResponse deleteById(Long id) {
         Optional<Phase> phaseOptional = phaseRepository.findById(id);
         BusinessAssert.isTrue(phaseOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         phaseRepository.deleteById(id);
+        return new CustomResponse("Thành công", 1);
     }
 
     @Override
@@ -42,5 +42,12 @@ public class PhaseService implements IPhaseService{
         BusinessAssert.isTrue(phaseOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         phaseRepository.save(newPhase);
         return newPhase;
+    }
+
+    @Override
+    public List<Phase> findAll() {
+        List<Phase> phaseList = phaseRepository.findAll();
+        BusinessAssert.isTrue(phaseList.size() > 0, BusinessExceptionCode.EMPTY_LIST, "Danh sách rỗng") ;
+        return phaseList;
     }
 }

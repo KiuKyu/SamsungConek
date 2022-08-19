@@ -2,6 +2,7 @@ package com.samsungconek.service.part;
 
 import com.samsungconek.model.entity.Part;
 import com.samsungconek.repository.IPartRepository;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,10 @@ public class PartService implements IPartService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public CustomResponse deleteById(Long id) {
         Optional<Part> partOptional = partRepository.findById(id);
         BusinessAssert.isTrue(partOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         partRepository.deleteById(id);
+        return new CustomResponse("Thành công", 1);
     }
 }

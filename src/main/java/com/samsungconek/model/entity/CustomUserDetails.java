@@ -2,35 +2,50 @@ package com.samsungconek.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private Long id;
     private String username;
     private String password;
-    private User user;
     private GrantedAuthority role;
 
-    public CustomUserDetails(User user) {
+    public static CustomUserDetails build(User user) {
+        Role userRole = user.getRole();
+        GrantedAuthority authority = new SimpleGrantedAuthority(userRole.getName());
+        return new CustomUserDetails(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                authority
+        );
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorityList = new ArrayList<>();
+        authorityList.add(role);
+        return authorityList;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return this.username;
     }
 
     @Override

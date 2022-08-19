@@ -108,7 +108,7 @@ public class BannerService extends A_Service implements IBannerService {
 
     @Override
     public Banner save(Banner banner) {
-        return null;
+        return bannerRepository.save(banner);
     }
 
     @Override

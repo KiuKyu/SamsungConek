@@ -3,11 +3,15 @@ package com.samsungconek.service.auth;
 import com.samsungconek.model.entity.CustomUserDetails;
 import com.samsungconek.utils.exception.CustomException;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
+@Slf4j
 public class JwtTokenProvider {
     private final String JWT_SECRET = "SamsungConnecto";
     private final long JWT_EXPIRATION = 604800000L;

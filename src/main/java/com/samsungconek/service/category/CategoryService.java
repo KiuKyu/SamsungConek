@@ -2,6 +2,7 @@ package com.samsungconek.service.category;
 
 import com.samsungconek.model.entity.Category;
 import com.samsungconek.repository.ICategoryRepository;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,11 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public CustomResponse deleteById(Long id) {
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        BusinessAssert.isTrue(categoryOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         categoryRepository.deleteById(id);
+        return new CustomResponse("Thành công", 1);
     }
 
     @Override

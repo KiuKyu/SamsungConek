@@ -13,5 +13,5 @@ public interface IUserService extends IGeneralService<User> {
 
     User findByUsername(String username);
 
-    Optional<User> findByEmail(String email);
+    User findByEmail(String email);
 }
