@@ -13,22 +13,20 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private Long id;
     private String username;
     private String password;
+    private User user;
     private GrantedAuthority role;
 
-    public static CustomUserDetails build(User user) {
+    public CustomUserDetails(User user) {
         Role userRole = user.getRole();
         GrantedAuthority authority = new SimpleGrantedAuthority(userRole.getName());
-        return new CustomUserDetails(
-                user.getId(),
-                user.getUsername(),
-                user.getPassword(),
-                authority
-        );
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.user = user;
+        this.role = authority;
     }
 
     @Override
@@ -40,12 +38,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.username;
+        return user.getUsername();
     }
 
     @Override

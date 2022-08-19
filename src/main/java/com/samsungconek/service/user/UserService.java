@@ -73,12 +73,12 @@ public class UserService implements IUserService, UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        return CustomUserDetails.build(user);
+        return new CustomUserDetails(user);
     }
 
     public UserDetails loadUserById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         BusinessAssert.isTrue(userOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
-        return CustomUserDetails.build(userOptional.get());
+        return new CustomUserDetails(userOptional.get());
         }
     }

@@ -5,7 +5,10 @@ import com.samsungconek.service.user.UserService;
 import com.samsungconek.utils.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,20 +32,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 Long userId = tokenProvider.getUserIdFromJWT(jwt); // Lấy userId từ chuỗi jwt
-                UserDetails userDetails = customUserDetailsService.loaUser
+                UserDetails userDetails = customUserDetailsService.loadUserById(userId);
+                if (userDetails != null) {
+                    // if user is valid => set securitycontext
+                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
             }
-        } catch (CustomException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.error("Failed to set user authentication", e);
         }
+
+        filterChain.doFilter(request, response);
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader != null) {
-            if (authHeader.startsWith("Bearer ")) {
-                return authHeader.replace("Bearer ", "");
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null) { // Check if header authorization has jwt
+            if (bearerToken.startsWith("Bearer ")) {
+                return bearerToken.replace("Bearer ", "");
             }
-            return authHeader;
+            return bearerToken;
         }
         return null;
     }
