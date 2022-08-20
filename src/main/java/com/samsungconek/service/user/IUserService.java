@@ -1,5 +1,6 @@
 package com.samsungconek.service.user;
 
+import com.samsungconek.model.dto.UserInputDto;
 import com.samsungconek.model.entity.User;
 import com.samsungconek.service.IGeneralService;
 import org.springframework.data.domain.Page;
@@ -14,4 +15,6 @@ public interface IUserService extends IGeneralService<User> {
     User findByUsername(String username);
 
     User findByEmail(String email);
+
+    User update(Long id, UserInputDto userInputDto);
 }

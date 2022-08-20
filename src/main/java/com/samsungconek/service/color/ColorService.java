@@ -42,4 +42,11 @@ public class ColorService implements IColorService{
         colorRepository.deleteById(id);
         return new CustomResponse("Thành công", 1);
     }
+
+    @Override
+    public Color update(Long id, Color newColor) {
+        Optional<Color> colorOptional = colorRepository.findById(id);
+        BusinessAssert.isTrue(colorOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return colorRepository.save(newColor);
+    }
 }

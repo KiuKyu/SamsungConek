@@ -11,12 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/categories")
-public class CategoryController {
+public class CategoryController extends AbstractController {
     @Autowired
     private ICategoryService categoryService;
 
@@ -25,9 +26,7 @@ public class CategoryController {
     //    find all cate
     @GetMapping
     public ResponseEntity<?> findAll() {
-
-        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, categories);
-        return new ResponseEntity<>(customResponse, HttpStatus.OK);
+        return getResponseEntity(categoryService.findAll());
     }
 
     //    find all cate (paging)
@@ -41,67 +40,85 @@ public class CategoryController {
     }
 
     //    find cate by ID
+//    @GetMapping("/{id}")
+//    public ResponseEntity<?> findById(@PathVariable Long id) {
+//        Optional<Category> categoryOptional = categoryService.findById(id);
+//        if (!categoryOptional.isPresent()) {
+//            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+//            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
+//        }
+//        Category category = categoryOptional.get();
+//        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, category);
+//        return new ResponseEntity<>(customResponse, HttpStatus.OK);
+//    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) {
-        Optional<Category> categoryOptional = categoryService.findById(id);
-        if (!categoryOptional.isPresent()) {
-            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
-            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
-        }
-        Category category = categoryOptional.get();
-        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, category);
-        return new ResponseEntity<>(customResponse, HttpStatus.OK);
+    public ResponseEntity<?> getOne (@PathVariable Long id) {
+        return getResponseEntity(categoryService.findById(id));
     }
 
     //    add new cate
+//    @PostMapping
+//    public ResponseEntity<?> createCategory(@RequestBody Category category) {
+//        Category newCategory = categoryService.save(category);
+//        CustomResponse customResponse = new CustomResponse("SUCCESS", 201, newCategory);
+//        return new ResponseEntity<>(customResponse, HttpStatus.CREATED);
+//    }
+
     @PostMapping
-    public ResponseEntity<?> createCategory(@RequestBody Category category) {
-        Category newCategory = categoryService.save(category);
-        CustomResponse customResponse = new CustomResponse("SUCCESS", 201, newCategory);
-        return new ResponseEntity<>(customResponse, HttpStatus.CREATED);
+    public ResponseEntity<?> create (@ModelAttribute Category category) {
+        return getResponseEntity(categoryService.save(category));
     }
 
     //    edit category
+//    @PutMapping("/{id}")
+//    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody Category newCategory) {
+//        Optional<Category> categoryOptional = categoryService.findById(id);
+//        if (!categoryOptional.isPresent()) {
+//            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+//            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
+//        } else {
+//            Category oldCategory = new Category();
+//            oldCategory.setId(id);
+//            oldCategory.setName(newCategory.getName());
+//            oldCategory.setBrands(newCategory.getBrands());
+//            oldCategory.setStatus(newCategory.isStatus());
+//            // oldCategory.setLevel(newCategory.getLevel());
+//            oldCategory.setParentCategory(newCategory.getParentCategory());
+//            oldCategory.setSpecs(newCategory.getSpecs());
+//            categoryService.save(oldCategory);
+//            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, oldCategory);
+//            return new ResponseEntity<>(customResponse, HttpStatus.OK);
+//        }
+//    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody Category newCategory) {
-        Optional<Category> categoryOptional = categoryService.findById(id);
-        if (!categoryOptional.isPresent()) {
-            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
-            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
-        } else {
-            Category oldCategory = new Category();
-            oldCategory.setId(id);
-            oldCategory.setName(newCategory.getName());
-            oldCategory.setBrands(newCategory.getBrands());
-            oldCategory.setStatus(newCategory.isStatus());
-            // oldCategory.setLevel(newCategory.getLevel());
-            oldCategory.setParentCategory(newCategory.getParentCategory());
-            oldCategory.setSpecs(newCategory.getSpecs());
-            categoryService.save(oldCategory);
-            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, oldCategory);
-            return new ResponseEntity<>(customResponse, HttpStatus.OK);
-        }
+    public ResponseEntity<?> update (@PathVariable Long id, @RequestBody Category category) {
+        return getResponseEntity(categoryService.update(id, category));
     }
 
     //    delete cate
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+//        Optional<Category> categoryOptional = categoryService.findById(id);
+//        if (!categoryOptional.isPresent()) {
+//            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
+//            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
+//        } else {
+//            categoryService.deleteById(id);
+//            Category deletedCategory = categoryOptional.get();
+//            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, deletedCategory);
+//            return new ResponseEntity<>(customResponse, HttpStatus.OK);
+//        }
+//    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
-        Optional<Category> categoryOptional = categoryService.findById(id);
-        if (!categoryOptional.isPresent()) {
-            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
-            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
-        } else {
-            categoryService.deleteById(id);
-            Category deletedCategory = categoryOptional.get();
-            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, deletedCategory);
-            return new ResponseEntity<>(customResponse, HttpStatus.OK);
-        }
+    public ResponseEntity<?> delete (@PathVariable Long id) {
+        return getResponseEntity(categoryService.deleteById(id));
     }
 
     @GetMapping("/header")
     public ResponseEntity<?> showHeaderCategory() {
-        Iterable<Category> categories = categoryService.findAllByParentCategoryIsNull();
-        CustomResponse customResponse = new CustomResponse("OK", 200, categories);
-        return new ResponseEntity<>(customResponse, HttpStatus.OK);
+        return getResponseEntity(categoryService.findAllByParentCategoryIsNull());
     }
 }

@@ -1,5 +1,6 @@
 package com.samsungconek.service.product;
 
+import com.samsungconek.model.dto.ProductDto;
 import com.samsungconek.model.entity.Category;
 import com.samsungconek.model.entity.Product;
 import com.samsungconek.repository.IProductRepository;
@@ -54,5 +55,38 @@ public class ProductService implements IProductService{
     @Override
     public Iterable<Product> findProductsByCategories(List<Category> categories) {
         return null;
+    }
+
+    @Override
+    public Product save(ProductDto productDto) {
+        Product product = new Product();
+        product.setName(productDto.getName());
+        product.setDiscount(productDto.getDiscount());
+        product.setPrice(productDto.getPrice());
+        product.setColor(productDto.getColor());
+        product.setCategories(productDto.getCategories());
+        product.setPriority(productDto.getPriority());
+        product.setStatus(productDto.isStatus());
+        product.setStock(productDto.getStock());
+        product.setContent(productDto.getContent());
+        return productRepository.save(product);
+    }
+
+    @Override
+    public Product update(Long id, ProductDto productDto) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        BusinessAssert.isTrue(productOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        Product product = new Product();
+        product.setId(id);
+        product.setName(productDto.getName());
+        product.setDiscount(productDto.getDiscount());
+        product.setPrice(productDto.getPrice());
+        product.setColor(productDto.getColor());
+        product.setCategories(productDto.getCategories());
+        product.setPriority(productDto.getPriority());
+        product.setStatus(productDto.isStatus());
+        product.setStock(productDto.getStock());
+        product.setContent(productDto.getContent());
+        return productRepository.save(product);
     }
 }

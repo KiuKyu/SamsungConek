@@ -11,21 +11,27 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/roles")
-public class RoleController {
+public class RoleController extends AbstractController {
     @Autowired
     private IRoleService roleService;
 //    Find all role
     @GetMapping
     public ResponseEntity<?> findAllRoles() {
-        Iterable<Role> roles = roleService.findAll();
-        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, roles);
-        return new ResponseEntity<>(customResponse, HttpStatus.OK);
+        return getResponseEntity(roleService.findAll());
     }
 //    Create role
     @PostMapping
     public ResponseEntity<?> createRole(@RequestBody Role role) {
-        Role newRole = roleService.save(role);
-        CustomResponse customResponse = new CustomResponse("SUCCESS", 201, newRole);
-        return new ResponseEntity<>(customResponse, HttpStatus.CREATED);
+        return getResponseEntity(roleService.save(role));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOne (@PathVariable Long id) {
+        return getResponseEntity(roleService.findById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update (@PathVariable Long id, Role role) {
+        return getResponseEntity(roleService.update(id, role));
     }
 }

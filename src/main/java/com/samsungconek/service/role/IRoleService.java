@@ -4,5 +4,5 @@ import com.samsungconek.model.entity.Role;
 import com.samsungconek.service.IGeneralService;
 
 public interface IRoleService extends IGeneralService<Role> {
-
+    Role update (Long id, Role newRole);
 }

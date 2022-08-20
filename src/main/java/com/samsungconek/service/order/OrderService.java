@@ -2,6 +2,7 @@ package com.samsungconek.service.order;
 
 import com.samsungconek.model.entity.Order;
 import com.samsungconek.repository.IOrderRepository;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,10 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public CustomResponse deleteById(Long id) {
         Optional<Order> orderOptional = orderRepository.findById(id);
         BusinessAssert.isTrue(orderOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         orderRepository.deleteById(id);
+        return new CustomResponse("Thành công", 1);
     }
 }

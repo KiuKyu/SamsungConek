@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/users")
-public class UserController {
+public class UserController extends AbstractController {
     public final int ITEM_PER_PAGE = 10;
 
     @Autowired
@@ -34,14 +34,9 @@ public class UserController {
     // Find user with ID
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Optional<User> userOptional = userService.findById(id);
-        if (!userOptional.isPresent()) {
-            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
-            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
-        }
-        User user = userOptional.get();
-        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, user);
-        return new ResponseEntity<>(customResponse, HttpStatus.OK);
+        return getResponseEntity(userService.findById(id));
     }
     // Create user = Register = làm phần này sau khi làm Security
+
+//    @PutMapping()
 }

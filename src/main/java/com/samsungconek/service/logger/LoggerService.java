@@ -2,6 +2,7 @@ package com.samsungconek.service.logger;
 
 import com.samsungconek.model.entity.Logger;
 import com.samsungconek.repository.ILoggerRepository;
+import com.samsungconek.utils.CustomResponse;
 import com.samsungconek.utils.exception.BusinessAssert;
 import com.samsungconek.utils.exception.BusinessExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,11 @@ public class LoggerService implements ILoggerService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public CustomResponse deleteById(Long id) {
         Optional<Logger> loggerOptional = loggerRepository.findById(id);
         BusinessAssert.isTrue(loggerOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
         loggerRepository.deleteById(id);
+        return new CustomResponse("Thành công", 1);
     }
 
     @Override

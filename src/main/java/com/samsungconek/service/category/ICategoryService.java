@@ -11,4 +11,6 @@ public interface ICategoryService extends IGeneralService<Category> {
     Page<Category> findAll(Pageable pageable);
 
     List<Category> findAllByParentCategoryIsNull();
+
+    Category update (Long id, Category newCategory);
 }

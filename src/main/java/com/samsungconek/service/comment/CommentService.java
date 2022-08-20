@@ -42,4 +42,11 @@ public class CommentService implements ICommentService {
         commentRepository.deleteById(id);
         return new CustomResponse("Thành công", 1);
     }
+
+    @Override
+    public Comment update(Long id, Comment newComment) {
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+        BusinessAssert.isTrue(commentOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return commentRepository.save(newComment);
+    }
 }

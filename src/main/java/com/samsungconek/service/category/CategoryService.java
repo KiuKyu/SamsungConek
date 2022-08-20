@@ -56,4 +56,11 @@ public class CategoryService implements ICategoryService {
         BusinessAssert.isTrue(categoryList.size() > 0, BusinessExceptionCode.EMPTY_LIST, "Danh sách rỗng");
         return categoryList;
     }
+
+    @Override
+    public Category update(Long id, Category newCategory) {
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        BusinessAssert.isTrue(categoryOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return categoryRepository.save(newCategory);
+    }
 }

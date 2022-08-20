@@ -42,4 +42,11 @@ public class RoleService implements IRoleService{
         roleRepository.deleteById(id);
         return new CustomResponse("Thành công", 1);
     }
+
+    @Override
+    public Role update(Long id, Role newRole) {
+        Optional<Role> roleOptional = roleRepository.findById(id);
+        BusinessAssert.isTrue(roleOptional.isPresent(), BusinessExceptionCode.NOT_EXIST, "Không tồn tại");
+        return roleRepository.save(newRole);
+    }
 }

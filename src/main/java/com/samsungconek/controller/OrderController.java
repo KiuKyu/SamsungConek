@@ -13,7 +13,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/orders")
-public class OrderController {
+public class OrderController extends AbstractController {
     @Autowired
     private IOrderService orderService;
 
@@ -21,9 +21,7 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<?> findAll() {
 //        add principal check for admin role
-        Iterable<Order> orders = orderService.findAll();
-        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, orders);
-        return new ResponseEntity<>(customResponse, HttpStatus.OK);
+        return getResponseEntity(orderService.findAll());
     }
 
     // as admin . find all orders of 1 customers
@@ -48,14 +46,6 @@ public class OrderController {
 //    as admin. find an order by ID
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Optional<Order> orderOptional = orderService.findById(id);
-        if (!orderOptional.isPresent()) {
-            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
-            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
-        } else {
-            Order order = orderOptional.get();
-            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, order);
-            return new ResponseEntity<>(customResponse, HttpStatus.OK);
-        }
+        return getResponseEntity(orderService.findById(id));
     }
 }

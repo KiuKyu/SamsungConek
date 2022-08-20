@@ -50,49 +50,6 @@ public class BannerController extends AbstractController {
 //        Envelope cr = new Envelope(banner);
 //        return cr.toResponseEntity();
 //    }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<?> updateBanner(@PathVariable Long id, @ModelAttribute BannerDto bannerDto) {
-//        ResponseHandler responseHandler = new ResponseHandler();
-//        Banner banner;
-//        try {
-//            Optional<Banner> bannerOptional = bannerService.findById(id);
-//            banner = bannerOptional.get();
-//        } catch (CustomException e) {
-//            responseHandler.setCode(2);
-//            responseHandler.setMessage("FAILURE");
-//            return new ResponseEntity<>(responseHandler, HttpStatus.BAD_REQUEST);
-//        }
-//        Banner oldBanner = new Banner();
-//        oldBanner.setId(id);
-//        oldBanner.setName(bannerDto.getName());
-//        oldBanner.setStatus(bannerDto.isStatus());
-//        oldBanner.setPriority(bannerDto.getPriority());
-//        oldBanner.setEndDate(bannerDto.getEndDate());
-//
-//        MultipartFile img = bannerDto.getImage();
-//        if (img != null && img.getSize() != 0) {
-//            String fileName = img.getOriginalFilename();
-//            long currentTime = System.currentTimeMillis();
-////            Logger logger = new Logger();
-////            logger.setLogTime(currentTime);
-//            fileName = currentTime + "_" + fileName;
-//            try {
-//                FileCopyUtils.copy(img.getBytes(), new File(uploadPath + fileName));
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//            oldBanner.setImage(fileName);
-//            bannerService.save(oldBanner);
-//            responseHandler.setCode(1);
-//            responseHandler.setMessage("SUCCESS");
-//            responseHandler.setData(oldBanner);
-//            return new ResponseEntity<>(responseHandler, HttpStatus.OK);
-//        }
-//        responseHandler.setCode(2);
-//        responseHandler.setMessage("FAILURE");
-//        return new ResponseEntity<>(responseHandler, HttpStatus.BAD_REQUEST);
-//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBanner(@PathVariable Long id) {

@@ -18,7 +18,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/products")
-public class ProductController {
+public class ProductController extends AbstractController {
     @Autowired
     private IProductService productService;
 
@@ -30,9 +30,7 @@ public class ProductController {
 //    find all
     @GetMapping
     public ResponseEntity<?> findAll() {
-        Iterable<Product> products = productService.findAll();
-        CustomResponse customResponse = new CustomResponse("SUCCESS", 200, products);
-        return new ResponseEntity<>(customResponse, HttpStatus.OK);
+        return getResponseEntity(productService.findAll());
     }
 
     // find all + paging
@@ -46,65 +44,20 @@ public class ProductController {
 
     // create product
     @PostMapping
-    public ResponseEntity<Product> createProduct(@ModelAttribute ProductDto productDto) {
+    public ResponseEntity<?> createProduct(@ModelAttribute ProductDto productDto) {
         // Làm phần list image sau
-//        List<ProductImageDto> productImages = productDto.getProductImages();
-//        if (!productImages.isEmpty()) {
-//
-//        }
-        Product product = new Product();
-        product.setName(productDto.getName());
-        product.setCategories(productDto.getCategories());
-        product.setPrice(productDto.getPrice());
-        product.setStock(productDto.getStock());
-        product.setDiscount(productDto.getDiscount());
-        product.setColor(productDto.getColor());
-        product.setPriority(productDto.getPriority());
-        product.setStatus(productDto.isStatus());
-
-        long currentTime = System.currentTimeMillis();
-//        product.setCreateDate(currentTime);
-
-        return new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
+        return getResponseEntity(productService.save(productDto));
     }
 
     // find by id
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Optional<Product> productOptional = productService.findById(id);
-        if (!productOptional.isPresent()) {
-            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
-            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
-        } else {
-            Product product = productOptional.get();
-            CustomResponse customResponse = new CustomResponse("SUCCESS", 200, product);
-            return new ResponseEntity<>(customResponse, HttpStatus.OK);
-        }
+        return getResponseEntity(productService.findById(id));
     }
 
     // update product
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @ModelAttribute ProductDto productDto) {
-        Optional<Product> productOptional = productService.findById(id);
-        if (!productOptional.isPresent()) {
-            CustomResponse customResponse = new CustomResponse("FAILURE", 404);
-            return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
-        } else {
-            Product oldProduct = new Product();
-            oldProduct.setId(id);
-            oldProduct.setName(productDto.getName());
-            oldProduct.setCategories(productDto.getCategories());
-            oldProduct.setDiscount(productDto.getDiscount());
-            oldProduct.setPrice(productDto.getPrice());
-            oldProduct.setPriority(productDto.getPriority());
-            oldProduct.setStatus(productDto.isStatus());
-            oldProduct.setColor(productDto.getColor());
-            oldProduct.setStock(productDto.getStock());
-
-            long currentTime = System.currentTimeMillis();
-//            oldProduct.setModifyDate(currentTime);
-
-            return new ResponseEntity<>(productService.save(oldProduct), HttpStatus.OK);
-        }
+        return getResponseEntity(productService.update(id, productDto));
     }
 }
